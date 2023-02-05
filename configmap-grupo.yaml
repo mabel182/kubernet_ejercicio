@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: diplomado
+data:
+  grupo: "2"
+  modulo: "7"

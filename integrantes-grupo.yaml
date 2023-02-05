@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: integrantes
+stringData:
+  integrante1: "Oriana-Pardo"
+  integrante2: "Cynthia-Manriquez"
+  integrante3: "Maria-Alejandra-Bravo"
+  integrante4: "Mabel-Contreras"
+

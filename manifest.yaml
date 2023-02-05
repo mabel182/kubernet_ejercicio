@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diplomado-usach
+  labels:
+    app: DevOpsUsach
+spec:
+   replicas: 2
+   selector:
+    matchLabels:
+      app: DevOpsUsach
+   strategy:
+       type: RollingUpdate
+       rollingUpdate:
+         maxSurge: 2
+         maxUnavailable: 0
+   template:
+    metadata:
+      labels:
+        app: DevOpsUsach
+    spec:
+      containers:
+        - name: diplomado-usach
+          image: hippolyta/tareagrupo2:v1.0
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "touch /tmp/healthy"
+          ports: 
+            - containerPort: 8081
+          env:
+            - name: NUMERO
+              valueFrom:
+                configMapKeyRef:
+                  name: diplomado
+                  key: grupo
+            - name: SECCION
+              valueFrom:
+                configMapKeyRef:
+                  name: diplomado
+                  key: modulo
+            - name: NOMBRE-INTEGRANTES1
+              valueFrom:
+                secretKeyRef:
+                  name: integrantes
+                  key: integrante1
+            - name: NOMBRE-INTEGRANTES2
+              valueFrom:
+                secretKeyRef:
+                  name: integrantes
+                  key: integrante2
+            - name: NOMBRE-INTEGRANTES3
+              valueFrom:
+                secretKeyRef:
+                  name: integrantes
+                  key: integrante3
+            - name: NOMBRE-INTEGRANTES4
+              valueFrom:
+                secretKeyRef:
+                  name: integrantes
+                  key: integrante4
+            - name: NODE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret-credentials
+                  key: username
+            - name: NODE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret-credentials
+                  key: password
+            - name: JAVA-VERSION
+              value: "11.0.16"
+          livenessProbe:
+            exec:
+              command:
+              - cat
+              - /tmp/healthy
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+              - cat
+              - /tmp/healthy
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+
+
+          
+          
+
+
